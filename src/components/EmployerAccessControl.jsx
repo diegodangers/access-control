@@ -86,14 +86,15 @@ const EmployerAccessControl = () => {
         const text = e.target.result;
         const lines = text.split('\n');
         const newEmployees = lines.slice(1).map(line => {
-          const [name, employeeNumber] = line.split(',');
+          const [firstName, lastName, employeeNumber] = line.split(',');
           return {
-            name: name?.trim(),
+            firstName: firstName?.trim(),
+            lastName: lastName?.trim(),
             employeeNumber: employeeNumber?.trim(),
             uid: '',
             location: ''
           };
-        }).filter(emp => emp.name && emp.employeeNumber);
+        }).filter(emp => emp.firstName && emp.lastName && emp.employeeNumber);
         setEmployees(newEmployees);
       };
       reader.readAsText(file);
@@ -115,9 +116,9 @@ const EmployerAccessControl = () => {
   };
 
   const exportCsv = () => {
-    const csvContent = "Name,Employee Number,UID,Location\n" + 
+    const csvContent = "FirstName,LastName,Employee Number,UID,Location\n" + 
       employees.map(emp => 
-        `${emp.name},${emp.employeeNumber},${emp.uid},${emp.location}`
+        `${emp.firstName},${emp.lastName},${emp.employeeNumber},${emp.uid},${emp.location}`
       ).join('\n');
     
     const blob = new Blob([csvContent], { type: 'text/csv' });
@@ -206,11 +207,12 @@ const EmployerAccessControl = () => {
             </div>
           )}
 
-          <div className="overflow-x-auto">
+<div className="overflow-x-auto">
             <table className="w-full border-collapse bg-white">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Name</th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">First Name</th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Last Name</th>
                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Employee Number</th>
                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">UID</th>
                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Location</th>
@@ -223,7 +225,8 @@ const EmployerAccessControl = () => {
                     key={index}
                     className={`${currentEmployee === employee ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
                   >
-                    <td className="px-4 py-2 text-sm text-gray-900">{employee.name}</td>
+                    <td className="px-4 py-2 text-sm text-gray-900">{employee.firstName}</td>
+                    <td className="px-4 py-2 text-sm text-gray-900">{employee.lastName}</td>
                     <td className="px-4 py-2 text-sm text-gray-900">{employee.employeeNumber}</td>
                     <td className="px-4 py-2 text-sm text-gray-900">{employee.uid}</td>
                     <td className="px-4 py-2 text-sm text-gray-900">{employee.location}</td>
